@@ -1,0 +1,48 @@
+-- Create Bills table
+CREATE TABLE bills (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    apartment_id INT NOT NULL,
+    bill_type ENUM('rent', 'electricity', 'water', 'maintenance') NOT NULL,
+    amount DECIMAL(10,2) NOT NULL,
+    units_used DECIMAL(10,2) DEFAULT NULL,
+    due_date DATE NOT NULL,
+    status ENUM('pending', 'paid', 'overdue') DEFAULT 'pending',
+    paid_date DATE NULL,
+    payment_method VARCHAR(50) DEFAULT NULL,
+    transaction_id VARCHAR(100) DEFAULT NULL,
+    notes TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (apartment_id) REFERENCES apartments(id) ON DELETE CASCADE,
+    INDEX idx_user (user_id),
+    INDEX idx_apartment (apartment_id),
+    INDEX idx_status (status),
+    INDEX idx_due_date (due_date),
+    INDEX idx_bill_type (bill_type)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO bills (user_id, apartment_id, bill_type, amount, units_used, due_date, status, paid_date) VALUES
+(2, 1, 'rent', 1500.00, NULL, '2025-04-01', 'paid', '2025-03-28'),
+(2, 1, 'electricity', 85.50, 285.00, '2025-04-05', 'paid', '2025-04-02'),
+(2, 1, 'water', 35.00, NULL, '2025-04-05', 'paid', '2025-04-02'),
+(2, 1, 'maintenance', 50.00, NULL, '2025-04-01', 'paid', '2025-03-30'),
+(3, 2, 'rent', 1000.00, NULL, '2025-04-01', 'paid', '2025-04-01'),
+(3, 2, 'electricity', 65.00, 220.00, '2025-04-05', 'paid', '2025-04-03'),
+(3, 2, 'water', 25.00, NULL, '2025-04-05', 'paid', '2025-04-03'),
+(4, 4, 'rent', 1600.00, NULL, '2025-04-01', 'pending', NULL),
+(4, 4, 'electricity', 95.00, 310.00, '2025-04-05', 'pending', NULL),
+(4, 4, 'water', 40.00, NULL, '2025-04-05', 'pending', NULL),
+(5, 5, 'rent', 1800.00, NULL, '2025-04-01', 'paid', '2025-03-29'),
+(5, 5, 'electricity', 110.00, 380.00, '2025-04-05', 'paid', '2025-04-01'),
+(5, 5, 'water', 45.00, NULL, '2025-04-05', 'paid', '2025-04-01'),
+(6, 7, 'rent', 2500.00, NULL, '2025-04-01', 'pending', NULL),
+(6, 7, 'electricity', 150.00, 520.00, '2025-04-05', 'pending', NULL),
+(6, 7, 'water', 60.00, NULL, '2025-04-05', 'pending', NULL),
+(8, 9, 'rent', 3500.00, NULL, '2025-04-01', 'paid', '2025-03-27'),
+(8, 9, 'electricity', 200.00, 680.00, '2025-04-05', 'paid', '2025-04-03'),
+(8, 9, 'water', 75.00, NULL, '2025-04-05', 'paid', '2025-04-03'),
+(8, 9, 'maintenance', 100.00, NULL, '2025-04-01', 'paid', '2025-03-28');
+
+SELECT * FROM bills;
