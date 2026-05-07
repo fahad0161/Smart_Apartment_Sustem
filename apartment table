@@ -1,0 +1,30 @@
+-- Create Apartments table
+CREATE TABLE apartments (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    unit_number VARCHAR(20) UNIQUE NOT NULL,
+    floor INT NOT NULL,
+    bedrooms INT NOT NULL DEFAULT 1,
+    bathrooms INT NOT NULL DEFAULT 1,
+    area_sqft DECIMAL(10,2) NOT NULL,
+    rent_amount DECIMAL(10,2) NOT NULL,
+    status ENUM('vacant', 'occupied') DEFAULT 'vacant',
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_status (status),
+    INDEX idx_floor (floor)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO apartments (unit_number, floor, bedrooms, bathrooms, area_sqft, rent_amount, status, description) VALUES
+('A101', 1, 2, 1, 850.00, 1500.00, 'occupied', 'Cozy 2-bedroom apartment on ground floor with garden view'),
+('A102', 1, 1, 1, 650.00, 1000.00, 'occupied', 'Compact 1-bedroom apartment, perfect for singles'),
+('A201', 2, 3, 2, 1200.00, 2200.00, 'vacant', 'Spacious 3-bedroom apartment with balcony'),
+('A202', 2, 2, 1, 900.00, 1600.00, 'occupied', 'Modern 2-bedroom with city view'),
+('B101', 1, 2, 2, 1000.00, 1800.00, 'occupied', 'Luxury 2-bedroom with modern amenities'),
+('B102', 1, 1, 1, 700.00, 1100.00, 'vacant', 'Cozy 1-bedroom near parking'),
+('B201', 2, 3, 2, 1350.00, 2500.00, 'occupied', 'Premium 3-bedroom penthouse style'),
+('B202', 2, 2, 2, 1100.00, 1900.00, 'vacant', 'Elegant 2-bedroom with study room'),
+('C101', 1, 4, 3, 1800.00, 3500.00, 'occupied', 'Executive 4-bedroom family suite'),
+('C201', 2, 3, 2, 1400.00, 2800.00, 'vacant', 'Modern 3-bedroom with home office');
+
+SELECT * FROM apartments;
