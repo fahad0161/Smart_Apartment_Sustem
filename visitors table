@@ -1,0 +1,31 @@
+-- Create Visitors table
+CREATE TABLE visitors (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    visitor_name VARCHAR(100) NOT NULL,
+    phone VARCHAR(20),
+    email VARCHAR(100) DEFAULT NULL,
+    apartment_id INT NOT NULL,
+    purpose VARCHAR(255),
+    entry_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+    exit_time DATETIME NULL,
+    checked_by INT NOT NULL,
+    status ENUM('inside', 'exited') DEFAULT 'inside',
+    visitor_count INT DEFAULT 1,
+    notes TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (apartment_id) REFERENCES apartments(id) ON DELETE CASCADE,
+    FOREIGN KEY (checked_by) REFERENCES users(id) ON DELETE CASCADE,
+    INDEX idx_apartment (apartment_id),
+    INDEX idx_entry_time (entry_time),
+    INDEX idx_status (status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO visitors (visitor_name, phone, apartment_id, purpose, entry_time, checked_by, status) VALUES
+('Rahim Ahmed', '+8801912345678', 1, 'Family Visit', '2025-04-10 14:30:00', 8, 'exited'),
+('Fatema Begum', '+8801923456789', 2, 'Delivery', '2025-04-10 15:45:00', 8, 'exited'),
+('Karim Uddin', '+8801934567890', 4, 'Friend Visit', '2025-04-11 10:00:00', 9, 'inside'),
+('Nusrat Jahan', '+8801945678901', 5, 'Package Delivery', '2025-04-11 11:30:00', 8, 'exited'),
+('Hasan Ali', '+8801956789012', 7, 'Maintenance Check', '2025-04-11 13:00:00', 9, 'inside'),
+('Sabina Aktar', '+8801967890123', 9, 'Guest', '2025-04-11 16:00:00', 8, 'inside');
+
+SELECT * FROM visitors;
