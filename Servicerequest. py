@@ -1,0 +1,121 @@
+Service Request Routes
+
+
+
+@app.route('/api/service-requests', methods=['GET'])
+@login_required
+def get_service_requests():
+    """Get all service requests"""
+    try:
+        status = request.args.get('status')
+        priority = request.args.get('priority')
+        request_type = request.args.get('type')
+        user_id = request.args.get('user_id', type=int)
+
+        # If user is tenant, only show their requests
+        if g.current_user['role'] == 'tenant':
+            user_id = g.current_user['user_id']
+
+        requests = models.ServiceRequest.get_all(
+            status=status,
+            priority=priority,
+            request_type=request_type,
+            user_id=user_id
+        )
+        return jsonify({'requests': requests})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/service-requests/<int:request_id>', methods=['GET'])
+@login_required
+def get_service_request(request_id):
+    """Get a specific service request"""
+    try:
+        service_request = models.ServiceRequest.get_by_id(request_id)
+        if not service_request:
+            return jsonify({'error': 'Service request not found'}), 404
+        return jsonify({'request': service_request})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/service-requests', methods=['POST'])
+@login_required
+def create_service_request():
+    """Create a new service request"""
+    try:
+        data = request.get_json()
+
+        required_fields = ['apartment_id', 'request_type', 'description']
+        for field in required_fields:
+            if field not in data:
+                return jsonify({'error': f'Missing required field: {field}'}), 400
+
+        # If user is tenant, use their apartment and user_id
+        user_id = g.current_user['user_id']
+        apartment_id = data['apartment_id']
+
+        if g.current_user['role'] == 'tenant':
+            user_id = g.current_user['user_id']
+            if not apartment_id:
+                apartment_id = g.current_user['apartment_id']
+
+        request_id = models.ServiceRequest.create(
+            user_id=user_id,
+            apartment_id=apartment_id,
+            request_type=data['request_type'],
+            description=data['description'],
+            priority=data.get('priority', 'medium'),
+            scheduled_date=data.get('scheduled_date')
+        )
+
+        models.ActivityLog.log(
+            g.current_user['user_id'],
+            'CREATE',
+            'service_request',
+            request_id,
+            f'Created {data["request_type"]} service request'
+        )
+
+        return jsonify({
+            'message': 'Service request created successfully',
+            'request_id': request_id
+        }), 201
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/service-requests/<int:request_id>', methods=['PUT'])
+@login_required
+def update_service_request(request_id):
+    """Update a service request"""
+    try:
+        data = request.get_json()
+
+        # Only admin can update other users' requests
+        service_request = models.ServiceRequest.get_by_id(request_id)
+        if not service_request:
+            return jsonify({'error': 'Service request not found'}), 404
+
+        if g.current_user['role'] != 'admin' and service_request['user_id'] != g.current_user['user_id']:
+            return jsonify({'error': 'Not authorized to update this request'}), 403
+
+        # Only admin can assign requests
+        if 'assigned_to' in data and g.current_user['role'] != 'admin':
+            return jsonify({'error': 'Only admin can assign requests'}), 403
+
+        models.ServiceRequest.update(request_id, data)
+
+        models.ActivityLog.log(
+            g.current_user['user_id'],
+            'UPDATE',
+            'service_request',
+            request_id,
+            f'Updated service request {request_id}'
+        )
+
+        return jsonify({'message': 'Service request updated successfully'})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
