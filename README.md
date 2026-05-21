@@ -1,11 +1,3 @@
-# Smart_Apartment_Sustem
-Md. Abu Houraira Fahad (2023200000090)
-Shahriar Sabbir (2023200000210)
-Rahad Hossen (2023200000332)
-Md Parvez Hossen (2023200000266)
-Sumaya Akter Shumi (2023200000262)
-
-
 # Smart Apartment Management System
 
 <div align="center">
@@ -84,228 +76,120 @@ The major objectives of this project are:
 
 # Core Features
 
-## 1. Authentication & Authorization
+## Authentication & Authorization
 
-The system includes a secure login and access control mechanism.
-
-### Features
 - User Registration
 - Login Authentication
 - Role-Based Authorization
 - Session/Token-Based Authentication
-- Protected API Routes
 
-### Supported Roles
-
-| Role | Access Level |
-|------|--------------|
-| **Admin** | Full system access |
-| **Tenant** | Limited apartment-specific access |
+### Roles
+| Role | Access |
+|------|--------|
+| Admin | Full Access |
+| Tenant | Limited Access |
 
 ---
 
-## 2. User Management
+## User Management
 
-Administrators can manage tenant accounts through a centralized dashboard.
-
-### Functionalities
-- Create New Users
-- Update User Information
+- Create Users
+- Update Users
 - Delete Users
-- Search and View Tenant Information
-- User Role Management
+- View Users
 
 ---
 
-## 3. Apartment Management
+## Apartment Management
 
-The system maintains apartment-related information efficiently.
-
-### Functionalities
 - Apartment Allocation
-- Apartment Information Tracking
-- Apartment Status Management
-- Tenant–Apartment Association
+- Apartment Tracking
+- Status Management
 
 ---
 
-## 4. Bill Management
+## Bill Management
 
-Digital billing features improve transparency and reduce manual accounting effort.
-
-### Functionalities
 - Bill Generation
-- Utility Bill Tracking
-- Monthly Payment Monitoring
-- Tenant Bill History
+- Bill Tracking
+- Payment Monitoring
 
 ---
 
-## 5. Service Request Management
+## Service Requests
 
-Tenants can request maintenance services digitally.
-
-### Available Service Categories
-- Plumbing
-- Electrical
-- Painting
-- Cleaning
-- Appliance Repair
-- Other Maintenance Services
-
-### Features
-- Request Submission
-- Priority Management
-- Request Status Tracking
-- Maintenance Monitoring
+- Maintenance Requests
+- Priority Handling
+- Status Tracking
 
 ---
 
-## 6. Dashboard & Analytics
+## Dashboard
 
-The dashboard provides system insights and operational visibility.
-
-### Dashboard Features
-- User Overview
-- Apartment Statistics
-- Bill Monitoring
-- Service Request Overview
+- Overview of Users
+- Apartments
+- Bills
+- Activities
 
 ---
 
 # System Architecture
 
-The project follows a **client-server architecture**:
-
-```text
-Frontend (HTML/CSS/Bootstrap)
-            │
-            ▼
-      Flask REST API
-            │
-            ▼
-        MySQL Database
-```
-
-### Architecture Components
-
-#### Frontend Layer
-Responsible for:
-- User Interface
-- User Interaction
-- Data Presentation
-
-#### Backend Layer
-Responsible for:
-- Business Logic
-- Authentication
-- API Handling
-- Database Communication
-
-#### Database Layer
-Responsible for:
-- Data Storage
-- Query Processing
-- Relationship Management
+Frontend → Flask API → MySQL Database
 
 ---
 
 # Technology Stack
 
-## Backend Technologies
-
-| Technology | Purpose |
-|------------|---------|
-| Python | Core Programming Language |
-| Flask | Backend Framework |
-| Flask-CORS | Cross-Origin Requests |
-| bcrypt | Password Security |
-| PyMySQL | Database Connectivity |
-
----
-
-## Frontend Technologies
-
-| Technology | Purpose |
-|------------|---------|
-| HTML5 | Page Structure |
-| CSS3 | Styling |
-| Bootstrap 5 | Responsive UI |
-| JavaScript | Client-Side Functionality |
-
----
-
-## Database
-
-| Technology | Purpose |
-|------------|---------|
-| MySQL | Relational Database Management |
+- Python
+- Flask
+- MySQL
+- HTML, CSS, Bootstrap
+- JavaScript
+- bcrypt
 
 ---
 
 # Project Structure
 
-```plaintext
+```
 Smart_Apartment_Sustem/
-│
-├── Backend/
+│── Backend/
 │   ├── app.py
 │   ├── config.py
 │   └── users.py
 │
-├── Frontend/
+│── Frontend/
 │   └── users.html
 │
-├── dashboard.html
-├── apartment.html
-├── Billtable.html
-├── models.py
-├── requirements.txt
-├── README.md
-└── env.txt
+│── dashboard.html
+│── apartment.html
+│── Billtable.html
+│── models.py
+│── requirements.txt
+│── README.md
+│── env.txt
 ```
 
 ---
 
 # Installation & Setup
 
-## Step 1: Clone the Repository
-
-```bash
-git clone https://github.com/your-username/Smart_Apartment_Sustem.git
+## 1. Clone Repository
 ```
-
-Navigate to the project directory:
-
-```bash
+git clone https://github.com/your-username/Smart_Apartment_Sustem.git
 cd Smart_Apartment_Sustem
 ```
 
----
-
-## Step 2: Create Virtual Environment
-
-### Windows
-
-```bash
+## 2. Create Virtual Environment
+```
 python -m venv venv
-venv\Scripts\activate
+venv\Scripts\activate   (Windows)
+source venv/bin/activate (Linux/Mac)
 ```
 
-### Linux / macOS
-
-```bash
-python3 -m venv venv
-source venv/bin/activate
+## 3. Install Dependencies
 ```
-
----
-
-## Step 3: Install Dependencies
-
-Install all required packages:
-
-```bash
 pip install -r requirements.txt
 ```
 
@@ -313,15 +197,12 @@ pip install -r requirements.txt
 
 # Database Configuration
 
-Create a database in MySQL:
-
-```sql
+```
 CREATE DATABASE smart_apartment;
 ```
 
-Update your database credentials inside `config.py`:
-
-```python
+Update `config.py`:
+```
 DB_HOST = "localhost"
 DB_USER = "root"
 DB_PASSWORD = "your_password"
@@ -333,15 +214,12 @@ DB_PORT = 3306
 
 # Running the Application
 
-Run the Flask server:
-
-```bash
+```
 python app.py
 ```
 
-Application URL:
-
-```text
+Open:
+```
 http://localhost:5000
 ```
 
@@ -349,114 +227,79 @@ http://localhost:5000
 
 # API Documentation
 
-## Authentication APIs
+## Auth
+- POST `/api/auth/register`
+- POST `/api/auth/login`
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/auth/register` | Register a new user |
-| POST | `/api/auth/login` | Authenticate user |
+## Users
+- GET `/api/users`
+- POST `/api/users`
+- GET `/api/users/<id>`
+- PUT `/api/users/<id>`
+- DELETE `/api/users/<id>`
 
----
-
-## User Management APIs
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/users` | Retrieve all users |
-| POST | `/api/users` | Add a user |
-| GET | `/api/users/<id>` | Retrieve single user |
-| PUT | `/api/users/<id>` | Update user |
-| DELETE | `/api/users/<id>` | Delete user |
-
----
-
-## Bill Management APIs
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/bills` | Retrieve bills |
-| POST | `/api/bills` | Create bills |
+## Bills
+- GET `/api/bills`
+- POST `/api/bills`
 
 ---
 
 # Security Features
 
-The application implements several security measures:
-
-- Role-Based Access Control (RBAC)
+- Role-Based Access Control
 - Token Authentication
-- Password Encryption using bcrypt
-- Protected API Endpoints
-- Session Management
+- Password Encryption (bcrypt)
+- Protected Routes
 - Error Handling
 
 ---
 
 # Future Enhancements
 
-Planned future improvements include:
-
-- Online Payment Gateway
-- Mobile Application Integration
-- Push Notifications
-- Email/SMS Alerts
-- AI-Based Smart Monitoring
-- Real-Time Maintenance Tracking
-- Tenant Chat Support
+- Online Payment System
+- Mobile App
+- SMS/Email Notifications
+- AI-Based Monitoring
+- Real-time Tracking
 
 ---
 
-# Testing Strategy
-
-The system APIs can be tested using:
+# Testing
 
 - Postman
 - Thunder Client
-- Browser Developer Tools
-
-### Testing Areas
-- Authentication Testing
-- API Endpoint Validation
-- Database Operations
-- Authorization Testing
-- UI Functionality Testing
+- Browser Dev Tools
 
 ---
 
 # Team Contributions
 
-| Team Member | Role | Contribution |
-|-------------|------|--------------|
-| Member 1 | Backend Developer | API Development & Authentication |
-| Member 2 | Frontend Developer | UI Design & Integration |
-| Member 3 | Database Engineer | Database Design & Query Management |
-| Member 4 | QA & Documentation | Testing and Project Documentation |
+The Smart Apartment Management System was developed collaboratively by a team where each member was responsible for a specific module of the project.
 
-> Replace placeholder names with actual contributor information.
+| Team Member | Student ID | Responsibility / Contribution |
+|-------------|------------|--------------------------------|
+| **Md. Abu Houraira Fahad** | **2023200000090** | Designed and developed the **Apartment Management Module**, including apartment-related functionalities and management features. |
+| **Shahriar Sabbir** | **2023200000210** | Developed the **User Table and User Management Module**, including tenant/user-related operations. |
+| **Rahad Hossen** | **2023200000332** | Designed and implemented the **Bills Table and Billing Management Module** for bill tracking and management. |
+| **Md. Parvez Hossen** | **2023200000266** | Developed the **Visitor Table and Visitor Management Module** to manage visitor-related records and activities. |
+| **Sumaya Akter Shumi** | **2023200000262** | Worked on the **Service Request and Activity Management Modules**, including maintenance services and activity tracking functionalities. |
+
+### Additional Notes
+Some supporting components, design references, and implementation ideas were adapted from **open-source resources and publicly available references** for learning and educational purposes. All modifications and integrations were performed to align with the project requirements.
 
 ---
 
 # Academic Context
 
-This project was developed as part of an academic coursework/project to demonstrate practical implementation of:
-
-- Database Management Systems
-- Software Engineering Principles
-- REST API Development
-- Authentication & Authorization
-- Full Stack Web Development
+This project demonstrates:
+- Database Design
+- Web Development
+- API Integration
+- Authentication Systems
+- Full Stack Development
 
 ---
 
 # License
 
-This repository is intended for **educational and academic purposes only**.
-
----
-
-<div align="center">
-
-### Smart Apartment Management System  
-**Designed for efficient apartment administration and tenant management**
-
-</div>
+This project is for **educational purposes only**.
