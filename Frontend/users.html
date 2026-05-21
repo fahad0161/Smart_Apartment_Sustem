@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Apartment - Users</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="css/styles.css" rel="stylesheet" />
+  </head>
+  <body>
+    <nav class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <i class="fas fa-building"></i>
+        Smart Apartment
+      </div>
+      <ul class="nav flex-column mt-3">
+        <li class="nav-item">
+          <a class="nav-link" href="dashboard.html">
+            <i class="fas fa-home"></i>Dashboard
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="apartments.html">
+            <i class="fas fa-building"></i>Apartments
+          </a>
+        </li>
+        <li class="nav-item admin-only">
+          <a class="nav-link active" href="users.html">
+            <i class="fas fa-users"></i>Users
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="bills.html">
+            <i class="fas fa-file-invoice-dollar"></i>Bills
+          </a>
+        </li>
+        <li class="nav-item security-only">
+          <a class="nav-link" href="visitors.html">
+            <i class="fas fa-user-friends"></i>Visitors
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="service-requests.html">
+            <i class="fas fa-tools"></i>Service Requests
+          </a>
+        </li>
+        <li class="nav-item mt-3">
+          <a class="nav-link" href="#" id="logoutBtn">
+            <i class="fas fa-sign-out-alt"></i>Logout
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="main-content" id="mainContent">
+      <nav class="top-navbar d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+          <button
+            class="btn btn-link text-dark me-3 d-lg-none"
+            id="sidebarToggle"
+          >
+            <i class="fas fa-bars fa-lg"></i>
+          </button>
+          <span class="navbar-brand mb-0 h4">Users</span>
+        </div>
+        <div class="d-flex align-items-center">
+          <div class="user-info d-flex align-items-center">
+            <div class="user-avatar me-2" id="userAvatar">A</div>
+            <div>
+              <div class="fw-semibold" id="userName">Admin</div>
+              <small class="text-muted" id="userRole">Admin</small>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <div class="container-fluid p-4">
+        <div
+          class="page-header d-flex justify-content-between align-items-center"
+        >
+          <h4><i class="fas fa-users me-2"></i>Manage Users</h4>
+          <button
+            class="btn btn-primary"
+            data-bs-toggle="modal"
+            data-bs-target="#userModal"
+          >
+            <i class="fas fa-plus me-2"></i>Add User
+          </button>
+        </div>
+
+        <div class="filter-section">
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label">Role</label>
+              <select class="form-select" id="filterRole">
+                <option value="">All Roles</option>
+                <option value="admin">Admin</option>
+                <option value="tenant">Tenant</option>
+                <option value="security">Security</option>
+              </select>
+            </div>
+            <div class="col-md-4 d-flex align-items-end">
+              <button class="btn btn-secondary w-100" onclick="loadUsers()">
+                <i class="fas fa-filter me-2"></i>Apply Filters
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Username</th>
+                  <th>Full Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Role</th>
+                  <th>Apartment</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="usersTable">
+                <tr>
+                  <td colspan="8" class="text-center text-muted py-4">
+                    Loading users...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add/Edit User Modal -->
+    <div class="modal fade" id="userModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="userModalTitle">
+              <i class="fas fa-user-plus me-2"></i>Add User
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <form id="userForm">
+            <div class="modal-body">
+              <input type="hidden" id="userId" />
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Username</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="username"
+                    required
+                  />
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Full Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="fullName"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="password"
+                  placeholder="Leave blank to use password123"
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" required />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Phone</label>
+                <input type="tel" class="form-control" id="phone" />
+              </div>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Role</label>
+                  <select class="form-select" id="userRoleSelect" required>
+                    <option value="tenant">Tenant</option>
+                    <option value="security">Security</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Apartment (for tenants)</label>
+                  <select class="form-select" id="apartmentSelect">
+                    <option value="">Select Apartment</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Cancel
+              </button>
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save me-2"></i>Save
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/app.js?v=3"></script>
+    <script src="js/auth.js?v=3"></script>
+    <script>
+      // User Management
+      let apartments = [];
+
+      async function loadUsers() {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          window.location.href = "index.html";
+          return;
+        }
+
+        try {
+          const roleFilter = document.getElementById("filterRole").value;
+          let url = API_BASE_URL + "/users";
+          if (roleFilter) url += "?role=" + roleFilter;
+
+          const response = await fetch(url, {
+            headers: { Authorization: "Bearer " + token },
+          });
+
+          if (!response.ok) throw new Error("Failed to load users");
+
+          const data = await response.json();
+          renderUsers(data.users);
+        } catch (error) {
+          console.error("Error loading users:", error);
+        }
+      }
+
+      function renderUsers(users) {
+        const tbody = document.getElementById("usersTable");
+        if (!users || users.length === 0) {
+          tbody.innerHTML =
+            '<tr><td colspan="8" class="text-center text-muted py-4">No users found</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = users
+          .map(
+            (user) => `
+                <tr>
+                    <td>${user.id}</td>
+                    <td><strong>${user.username}</strong></td>
+                    <td>${user.full_name}</td>
+                    <td>${user.email}</td>
+                    <td>${user.phone || "-"}</td>
+                    <td><span class="badge badge-${user.role}">${user.role.charAt(0).toUpperCase() + user.role.slice(1)}</span></td>
+                    <td>${user.apartment_id ? "Unit " + user.apartment_id : "-"}</td>
+                    <td>
+                        <button class="btn btn-sm btn-info btn-action" onclick="viewUser(${user.id})">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-warning btn-action" onclick="editUser(${user.id})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        ${
+                          user.id !== currentUser?.id
+                            ? `
+                        <button class="btn btn-sm btn-danger btn-action" onclick="deleteUser(${user.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                        `
+                            : ""
+                        }
+                    </td>
+                </tr>
+            `,
+          )
+          .join("");
+      }
+
+      async function loadApartmentsForSelect() {
+        const token = localStorage.getItem("token");
+        try {
+          const response = await fetch(
+            API_BASE_URL + "/apartments?status=vacant",
+            {
+              headers: { Authorization: "Bearer " + token },
+            },
+          );
+          const data = await response.json();
+          apartments = data.apartments || [];
+          const select = document.getElementById("apartmentSelect");
+          select.innerHTML =
+            '<option value="">Select Apartment</option>' +
+            apartments
+              .map(
+                (a) =>
+                  `<option value="${a.id}">${a.unit_number} - $${a.rent_amount}/mo</option>`,
+              )
+              .join("");
+        } catch (error) {
+          console.error("Error loading apartments:", error);
+        }
+      }
+
+      document
+        .getElementById("userForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+          const token = localStorage.getItem("token");
+          const userId = document.getElementById("userId").value;
+          const isEdit = !!userId;
+
+          const formData = {
+            username: document.getElementById("username").value,
+            password: document.getElementById("password").value,
+            full_name: document.getElementById("fullName").value,
+            email: document.getElementById("email").value,
+            phone: document.getElementById("phone").value,
+            role: document.getElementById("userRoleSelect").value,
+            apartment_id:
+              document.getElementById("apartmentSelect").value || null,
+          };
+
+          try {
+            const url = isEdit
+              ? API_BASE_URL + "/users/" + userId
+              : API_BASE_URL + "/users";
+            const method = isEdit ? "PUT" : "POST";
+
+            const response = await fetch(url, {
+              method: method,
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + token,
+              },
+              body: JSON.stringify(formData),
+            });
+
+            if (response.ok) {
+              bootstrap.Modal.getInstance(
+                document.getElementById("userModal"),
+              ).hide();
+              loadUsers();
+              alert(
+                isEdit
+                  ? "User updated successfully!"
+                  : "User created successfully!",
+              );
+            } else {
+              const data = await response.json();
+              alert(data.error || "Operation failed");
+            }
+          } catch (error) {
+            alert("Error connecting to server");
+          }
+        });
+
+      async function deleteUser(userId) {
+        if (!confirm("Are you sure you want to delete this user?")) return;
+
+        const token = localStorage.getItem("token");
+        try {
+          const response = await fetch(API_BASE_URL + "/users/" + userId, {
+            method: "DELETE",
+            headers: { Authorization: "Bearer " + token },
+          });
+
+          if (response.ok) {
+            loadUsers();
+            alert("User deleted successfully!");
+          }
+        } catch (error) {
+          alert("Error deleting user");
+        }
+      }
+
+      // Initialize
+      loadUsers();
+      loadApartmentsForSelect();
+    </script>
+  </body>
+</html>
